@@ -1,33 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from googletrans import Translator
-import inflect
 import pandas as pd
 import tensorflow as tf
 import joblib
-
-class NumberListView(APIView):
-    def get(self, request):
-        numbers = [1, 2, 3, 4, 5]
-        return Response(numbers, status=status.HTTP_200_OK)
-    
-    def post(self, request, *args, **kwargs):
-        respuestas = request.data.get('respuestas', None)
-        if respuestas is not None and isinstance(respuestas, list):
-            p = inflect.engine()
-            translator = Translator()
-            
-            palabras = [p.number_to_words(int(respuesta)) for respuesta in respuestas]
-            traducciones = [translator.translate(palabra, src='en', dest='es').text for palabra in palabras]
-            
-            response = {
-                "respuestas": traducciones
-            }
-            
-            return Response(response, status=status.HTTP_200_OK)
-        else:
-            return Response({"error": "Invalid input"}, status=status.HTTP_400_BAD_REQUEST)
 
 # Create your views here.
 class PredictCareerView(APIView):
